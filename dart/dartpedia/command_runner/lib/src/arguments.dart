@@ -63,7 +63,7 @@ abstract class Command extends Argument {
   String? help;
 
   @override 
-  string? defaultValue;
+  String? defaultValue;
 
   @override
   String? valueHelp;
@@ -103,16 +103,19 @@ abstract class Command extends Argument {
 
   @override
   String get usage {
-    return '$name: $description';
+    return '$name: $descriptions';
   }
 }
 
+// Add this class to the end of the file
 class ArgResults {
   Command? command;
   String? commandArg;
   Map<Option, Object?> options = {};
 
+  // Returns true if the flag exists.
   bool flag(String name) {
+    // Only check flags, because we're sure that flags are booleans.
     for (var option in options.keys.where(
       (option) => option.type == OptionType.flag,
     )) {
@@ -129,9 +132,9 @@ class ArgResults {
 
   ({Option option, Object? input}) getOption(String name) {
     var mapEntry = options.entries.firstWhere(
-      (entry) => entry.key.name == name || entry.key.abbr
+      (entry) => entry.key.name == name || entry.key.abbr == name,
     );
 
-    return (option: mapEntry.key, input: mayEntry.value);
+    return (option: mapEntry.key, input: mapEntry.value);
   }
 }
